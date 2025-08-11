@@ -14,6 +14,7 @@ import Bookings from "./pages/Bookings";
 import Profile from "./pages/Profile";
 import Login from "./pages/auth/Login";
 import Verify from "./pages/auth/Verify";
+import Signup from "./pages/auth/Signup";
 
 const queryClient = new QueryClient();
 

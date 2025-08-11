@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
+import { upsertProfile } from "@/services/profile";
 
 function useQuery(){ const { search } = useLocation(); return new URLSearchParams(search); }
 
@@ -13,12 +14,21 @@ const Verify = () => {
   const q = useQuery();
   const email = q.get("email") ?? "";
   const [code, setCode] = useState("");
-  const { verifyOtp } = useAuth();
+  const { verifyOtp, user } = useAuth();
   const navigate = useNavigate();
 
   const onVerify = async () => {
     const { error } = await verifyOtp(email, code);
     if (error) return toast({ title: "Invalid OTP", description: error });
+    const pending = sessionStorage.getItem("qc_pending_profile");
+    if (pending) {
+      try {
+        const parsed = JSON.parse(pending);
+        const uid = user?.id ?? "dev-user";
+        await upsertProfile({ id: uid, role: parsed.role, full_name: parsed.full_name });
+      } catch {}
+      sessionStorage.removeItem("qc_pending_profile");
+    }
     toast({ title: "Welcome", description: "You're logged in!"});
     navigate("/");
   };

@@ -25,7 +25,7 @@ const Header = () => {
           ) : (
             <>
               <NavLink to="/login" className="text-sm text-muted-foreground hover:text-foreground">Log in</NavLink>
-              <NavLink to="/login"><Button className="hover-glow">Get Started</Button></NavLink>
+              <NavLink to="/signup"><Button className="hover-glow">Get Started</Button></NavLink>
             </>
           )}
         </div>
